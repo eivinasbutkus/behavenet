@@ -10,20 +10,28 @@ from behavenet.models.ae_model_architecture_generator import load_handcrafted_ar
 
 
 def get_all_params(search_type='grid_search', args=None):
-
+    
     # Raise error if user has other command line arguments specified (as could override configs in
     # confusing ways)
     if args is not None and len(args) != 8:
         raise ValueError('No command line arguments allowed other than config file names')
     elif args is None and len(sys.argv[1:]) != 8:
-        raise ValueError('No command line arguments allowed other than config file names')
+        print("all good, will use defaults where missing :P")
+        #raise ValueError('No command line arguments allowed other than config file names')
+  
+    # TODO remove this hack
+    params_path = "/home/eivinas/dev/rnn-ps-vae/behavenet_projects/ibl_angelakilab/"
 
     # Create parser
     parser = HyperOptArgumentParser(strategy=search_type)
-    parser.add_argument('--data_config', type=str)
-    parser.add_argument('--model_config', type=str)
-    parser.add_argument('--training_config', type=str)
-    parser.add_argument('--compute_config', type=str)
+    parser.add_argument('--data_config', type=str,
+            default = params_path + 'data.json')
+    parser.add_argument('--model_config', type=str,
+            default = params_path + 'model.json')
+    parser.add_argument('--training_config', type=str,
+            default = params_path + 'training.json')
+    parser.add_argument('--compute_config', type=str,
+            default = params_path + 'compute.json')
 
     namespace, extra = parser.parse_known_args(args)
 
